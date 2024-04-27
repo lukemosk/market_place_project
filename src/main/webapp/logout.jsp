@@ -7,8 +7,15 @@
 <title>Logout</title>
 </head>
 <body> 
-<!-- This is just out logout page, set up so that we can log back in from the link in line 12 -->
-    <h1>You have been logged out</h1><br>
-    <a href='login.html'>Login Again</a>
+	<% 
+	if(session.getAttribute("user") == null) {
+		out.println("<h1>You are not logged in!</h1><br>");
+		out.println("<a href='login.html'>Login</a>");
+	} else {
+		session.invalidate(); 
+		out.println("<h1>You have been logged out</h1><br>");
+		out.println("<a href='login.html'>Login Again</a>");
+	}
+	%> 
 </body>
 </html>

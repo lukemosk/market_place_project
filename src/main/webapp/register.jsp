@@ -17,22 +17,26 @@
 
 	try {
 		Connection conn = ApplicationDB.getConnection();
-		PreparedStatement pst = conn.prepareStatement(Queries.getLoginUser(username, password));
-		ResultSet rs = pst.executeQuery();
-
-		if (rs.next()) {
+		
+		String checkUserQuery = Queries.getLoginUser(username);
+		ResultSet rs = conn.prepareStatement(checkUserQuery).executeQuery();
+		
+		if(rs.next()) {
+			out.println("<h1>Registration Failed: A user with that name already exists!</h1>");
+			out.println("<a href='register.html'>Try again</a>");
+		} else {
+			String[] queries = Queries.createLoginUser(username, password);
+			conn.prepareStatement(queries[0]).executeUpdate();
+			conn.prepareStatement(queries[1]).executeUpdate();
+			conn.prepareStatement(queries[2]).executeUpdate();
+			
 			session.setAttribute("user", username);
-			out.println("<h1>Welcome, " + username + "!</h1>");
+			out.println("<h1>Welcome, " + username + "! You have successfully registered.</h1>");
 			out.println("<a href=home.html>Home</a>");
 			out.println("<a href=logout.jsp>Logout</a>");
-		} else {
-			out.println("<h1>Login Failed: Incorrect username or password.</h1>");
-			out.println("<a href='login.html'>Try again</a>");
 		}
 
 		conn.close();
-		pst.close();
-		rs.close();
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
