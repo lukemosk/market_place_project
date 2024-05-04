@@ -69,6 +69,7 @@ body {
 	<%
 	if (session.getAttribute("user") == null) {
 		response.sendRedirect("login.jsp");
+		return;
 	}
 	%>
 	<h1>Welcome to the FAQ page!</h1>
@@ -79,16 +80,16 @@ body {
 	<br>
 	<%
 	if (session.getAttribute("type").equals("default")) {
-	%>
-	<h3>Post a question...</h3>
-	<div class="post">
-		<form>
-			<textarea name="content" placeholder="Ask a question..."
-				style="width: 400px; height: 100px;"></textarea>
-			<input type="submit" value="Post">
-		</form>
-	</div>
-	<%
+		%>
+		<h3>Post a question...</h3>
+		<div class="post">
+			<form>
+				<textarea name="content" placeholder="Ask a question..."
+					style="width: 400px; height: 100px;"></textarea>
+				<input type="submit" value="Post">
+			</form>
+		</div>
+		<%
 	}
 	%>
 	<br>
@@ -109,12 +110,12 @@ body {
 			int updatedRows = conn.prepareStatement(deleteQuestion).executeUpdate();
 
 			if (updatedRows > 0) {
-		conn.close();
-		response.sendRedirect("faq.jsp");
+				conn.close();
+				response.sendRedirect("faq.jsp");
 			} else {
-		out.println("<h2>SQL Error when trying to delete message (no rows deleted)!</h2>");
-		conn.close();
-		return;
+				out.println("<h2>SQL Error when trying to delete message (no rows deleted)!</h2>");
+				conn.close();
+				return;
 			}
 		} catch (Exception e) {
 			out.println("<h2>SQL Error when trying to delete message!</h2>");
@@ -131,25 +132,26 @@ body {
 			ResultSet rs = conn.prepareStatement(getUserIDQuery).executeQuery();
 			String sellerID = null;
 			if (rs.next()) {
-		sellerID = rs.getString(1);
-		rs.close();
+				sellerID = rs.getString(1);
+				rs.close();
 			} else {
-		out.println("<h2>SQL Error.</h2>");
-		rs.close();
-		return;
+				out.println("<h2>SQL Error.</h2>");
+				rs.close();
+				return;
 			}
 
 			String addReply = "INSERT INTO faqs (poster_id, parent_id, content) VALUES (" + sellerID + ", " + parent_id
-			+ ", '" + content + "');";
+							+ ", '" + content + "');";
 			int updatedRows = conn.prepareStatement(addReply).executeUpdate();
 
 			if (updatedRows > 0) {
-		conn.close();
-		response.sendRedirect("faq.jsp");
+				conn.close();
+				response.sendRedirect("faq.jsp");
+				return;
 			} else {
-		out.println("<h2>SQL Error when trying to add reply (no rows added)!</h2>");
-		conn.close();
-		return;
+				out.println("<h2>SQL Error when trying to add reply (no rows added)!</h2>");
+				conn.close();
+				return;
 			}
 		} catch (Exception e) {
 			out.println("<h2>SQL Error when trying to add reply!</h2>");
@@ -178,12 +180,13 @@ body {
 			int updatedRows = conn.prepareStatement(addReply).executeUpdate();
 
 			if (updatedRows > 0) {
-		conn.close();
-		response.sendRedirect("faq.jsp");
+				conn.close();
+				response.sendRedirect("faq.jsp");
+				return;
 			} else {
-		out.println("<h2>SQL Error when trying to add question (no rows added)!</h2>");
-		conn.close();
-		return;
+				out.println("<h2>SQL Error when trying to add question (no rows added)!</h2>");
+				conn.close();
+				return;
 			}
 		} catch (Exception e) {
 			out.println("<h2>SQL Error when trying to add question!</h2>");
@@ -203,7 +206,7 @@ body {
 			String message_id = questions.getString(1);
 			String poster_id = questions.getString(2);
 			String message_content = questions.getString(3);
-			
+
 			String getUserNameQuery = "SELECT username FROM users where id='" + poster_id + "'";
 			ResultSet nameResult = conn.prepareStatement(getUserNameQuery).executeQuery();
 			String posterName = null;
@@ -214,16 +217,15 @@ body {
 			nameResult.close();
 			%>
 			<div class="question">
-				<h3><%= posterName %></h3>
-				<p><%= message_content %></p>
+				<h3><%=posterName%></h3>
+				<p><%=message_content%></p>
 				<%
-				
 				String getRepliesQuery = "SELECT poster_id, content FROM faqs WHERE parent_id =" + message_id + ";";
 				ResultSet replies = conn.prepareStatement(getRepliesQuery).executeQuery();
 				while (replies.next()) {
 					String reply_poster_id = replies.getString(1);
 					String reply_content = replies.getString(2);
-					
+		
 					String getReplyUserQuery = "SELECT username FROM users where id='" + reply_poster_id + "'";
 					ResultSet replyNameResult = conn.prepareStatement(getReplyUserQuery).executeQuery();
 					String replierName = null;
@@ -232,28 +234,29 @@ body {
 					else
 						replierName = "ERR";
 					replyNameResult.close();
-					
-					%>
-					<div class="reply">
-						<h3><%= replierName %></h3>
-						<p><%= reply_content %></p>
-					</div>
-					<%
-				}
-				if(type.equals("cs") || type.equals("admin")) {
-					%>
-					<form action="faq.jsp" method="POST">
-						<button type="submit" name="delete" value="<%= message_id %>">Delete</button> <br><br>
-						<input type="text" name="content" placeholder="Reply..."
-							style="width: 400px; height: 20px;"> <input type="submit"
-							value="Reply"> <input type="hidden" name="parent_id"
-							value="<%= message_id %>">
-					</form>
-					<%
-				}
 				%>
+				<div class="reply">
+					<h3><%=replierName%></h3>
+					<p><%=reply_content%></p>
+				</div>
+				<%
+				}
+				
+				if (type.equals("cs") || type.equals("admin")) {
+				%>
+				<form action="faq.jsp" method="POST">
+					<button type="submit" name="delete" value="<%=message_id%>">Delete</button>
+					<br>
+					<br> <input type="text" name="content" placeholder="Reply..."
+						style="width: 400px; height: 20px;"> <input type="submit"
+						value="Reply"> <input type="hidden" name="parent_id"
+						value="<%=message_id%>">
+				</form>
+				<%
+				}
+			%>
 			</div>
-			<%
+		<%
 		}
 	} catch (Exception e) {
 		out.println("<h2>SQL Error when trying to load questions!</h2>");
