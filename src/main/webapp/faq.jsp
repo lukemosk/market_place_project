@@ -78,20 +78,22 @@ body {
 	<br>
 	<br>
 	<br>
-	<%
-	if (session.getAttribute("type").equals("default")) {
-		%>
-		<h3>Post a question...</h3>
-		<div class="post">
-			<form>
-				<textarea name="content" placeholder="Ask a question..."
-					style="width: 400px; height: 100px;"></textarea>
-				<input type="submit" value="Post">
-			</form>
-		</div>
-		<%
-	}
-	%>
+	<h3>Post a question...</h3>
+	<div>
+		<form>
+			<textarea name="content" placeholder="Ask a question..."
+				style="width: 400px; height: 100px;"></textarea>
+			<input type="submit" value="Post">
+		</form>
+	</div>
+	<br>
+	<h3>Search for a question...</h3>
+	<div>
+		<form>
+			<input type="text" name="search">
+			<input type="submit" value="Search">
+		</form>
+	</div>
 	<br>
 	<br>
 
@@ -99,6 +101,7 @@ body {
 	String delete_id = request.getParameter("delete");
 	String parent_id = request.getParameter("parent_id");
 	String content = request.getParameter("content");
+	String search_content = request.getParameter("search");
 
 	// If a delete request was sent
 	if (delete_id != null) {
@@ -199,7 +202,15 @@ body {
 	try {
 		Connection conn = ApplicationDB.getConnection();
 		String type = (String) session.getAttribute("type");
-		String getQuestionsQuery = "SELECT message_id, poster_id, content FROM faqs WHERE parent_id IS NULL ORDER BY message_id DESC;";
+		String getQuestionsQuery = null;
+		if(search_content != null) {
+			getQuestionsQuery = "SELECT message_id, poster_id, content FROM faqs WHERE parent_id IS NULL "
+					+ "AND content like '%"
+					+ search_content + "%' "
+					+ "ORDER BY message_id DESC;";
+		} else {
+			getQuestionsQuery = "SELECT message_id, poster_id, content FROM faqs WHERE parent_id IS NULL ORDER BY message_id DESC;";
+		}
 		ResultSet questions = conn.prepareStatement(getQuestionsQuery).executeQuery();
 
 		while (questions.next()) {
