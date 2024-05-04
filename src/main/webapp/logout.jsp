@@ -10,11 +10,11 @@
 	<% 
 	if(session.getAttribute("user") == null) {
 		out.println("<h1>You are not logged in!</h1><br>");
-		out.println("<a href='login.html'>Login</a>");
+		out.println("<a href='login.jsp'>Login</a>");
 	} else {
 		session.invalidate(); 
 		out.println("<h1>You have been logged out</h1><br>");
-		out.println("<a href='login.html'>Login Again</a>");
+		out.println("<a href='login.jsp'>Login Again</a>");
 	}
 	%> 
 </body>

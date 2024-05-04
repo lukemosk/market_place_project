@@ -11,31 +11,48 @@
 <title>Login Result</title>
 </head>
 <body>
+	<h2>Register</h2>
+	<form action="register.jsp" method="POST">
+		Username: <input type="text" name="username" required><br>
+		Password: <input type="password" name="password" required><br>
+		<input type="submit" value="Register">
+	</form>
+	<p>Back to Login</p>
+	<form action="login.jsp" method="POST">
+		<button>Login</button>
+	</form>
+	<br><br>
 	<%
+	// If they are logged in, send them to home page
+	if(session.getAttribute("user") != null) {
+		response.sendRedirect("home.jsp");
+	}
+	
 	String username = request.getParameter("username");
 	String password = request.getParameter("password");
+	
+	if(username == null || password == null)
+		return;
 
 	try {
 		Connection conn = ApplicationDB.getConnection();
 		
-		String checkUserQuery = Queries.getLoginUser(username);
-		ResultSet rs = conn.prepareStatement(checkUserQuery).executeQuery();
-		
-		if(rs.next()) {
-			out.println("<h1>Registration Failed: A user with that name already exists!</h1>");
-			out.println("<a href='register.html'>Try again</a>");
-		} else {
-			String[] queries = Queries.createLoginUser(username, password);
-			conn.prepareStatement(queries[0]).executeUpdate();
-			conn.prepareStatement(queries[1]).executeUpdate();
-			conn.prepareStatement(queries[2]).executeUpdate();
-			
-			session.setAttribute("user", username);
-			out.println("<h1>Welcome, " + username + "! You have successfully registered.</h1>");
-			out.println("<a href=home.html>Home</a>");
-			out.println("<a href=logout.jsp>Logout</a>");
+		if (conn == null){
+			out.println("<h1>Login Failed: SQL Error.</h1>");
+			return;
 		}
-
+		
+		String query = Queries.createLoginUser(username, password);
+		
+		try {
+			conn.prepareStatement(query).executeUpdate();
+			session.setAttribute("user", username);
+			response.sendRedirect("home.jsp");
+		} catch (SQLIntegrityConstraintViolationException e) {
+			out.println("<h2>Registration Failed: A user with that name already exists!</h2>");
+			out.println("<h2>Please try again</h2>");
+		}
+		
 		conn.close();
 	} catch (Exception e) {
 		e.printStackTrace();

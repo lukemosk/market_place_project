@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1" import="com.cs336.pkg.*" %>
+    pageEncoding="ISO-8859-1"%>
 <%@ page import="java.io.*, java.util.*, java.sql.*" %>
 <%@ page import="javax.servlet.http.*, javax.servlet.*" %>
+<%@ page import="cs336.ApplicationDB"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -12,8 +13,7 @@
 <body>
     <%
         try {
-            ApplicationDB db = new ApplicationDB();
-            Connection con = db.getConnection();
+            Connection con = ApplicationDB.getConnection();
 
             String vin = request.getParameter("vin");
             String vehicleType = request.getParameter("vehicleType");
@@ -69,13 +69,10 @@
             vehicleStmt.close();
             auctionStmt.close();
            
-            db.closeConnection(con);
+            ApplicationDB.closeConnection(con);
 
         } catch (Exception e) {
-            
             out.println("<p>Error: " + e.getMessage() + "</p>");
-
-            
         }
     %>
 </body>

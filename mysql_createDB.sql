@@ -5,8 +5,8 @@ CREATE DATABASE cs336project;
 USE cs336project;
 
 CREATE TABLE users (
-  id int NOT NULL AUTO_INCREMENT,
-  username varchar(255) NOT NULL,
+  id int NOT NULL AUTO_INCREMENT UNIQUE,
+  username varchar(255) NOT NULL UNIQUE,
   password varchar(255) NOT NULL,
   type ENUM('admin', 'cs', 'default'),
   PRIMARY KEY (id)
@@ -24,8 +24,6 @@ CREATE TABLE vehicles (
     FOREIGN KEY (owner_id) REFERENCES users(id)
 );
 
-
-
 CREATE TABLE auctions (
     auction_id INT PRIMARY KEY AUTO_INCREMENT,  
     vehicle_id VARCHAR(17),                   
@@ -40,7 +38,6 @@ CREATE TABLE auctions (
     FOREIGN KEY (seller_id) REFERENCES users(id) 
 );
 
-/*
 CREATE TABLE bids (
     bid_id INT PRIMARY KEY AUTO_INCREMENT,  
     auction_id INT,                        
@@ -50,6 +47,3 @@ CREATE TABLE bids (
     FOREIGN KEY (auction_id) REFERENCES auctions(auction_id),
     FOREIGN KEY (bidder_id) REFERENCES users(id)
 );
-*/
-
-
