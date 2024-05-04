@@ -23,9 +23,9 @@
 	</form>
 	<br><br>
 	<%
-	// If they are logged in, send them to logout page
+	// If they are logged in, send them to home page
 	if(session.getAttribute("user") != null) {
-		response.sendRedirect("logout.jsp");
+		response.sendRedirect("home.jsp");
 	}
 	
 	String username = request.getParameter("username");

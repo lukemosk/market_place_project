@@ -47,3 +47,12 @@ CREATE TABLE bids (
     FOREIGN KEY (auction_id) REFERENCES auctions(auction_id),
     FOREIGN KEY (bidder_id) REFERENCES users(id)
 );
+
+CREATE TABLE faqs (
+    message_id INT PRIMARY KEY AUTO_INCREMENT,
+    poster_id INT,
+    parent_id INT,
+    content TEXT,
+    FOREIGN KEY (poster_id) REFERENCES users(id),
+    FOREIGN KEY (parent_id) REFERENCES faqs(message_id)
+);

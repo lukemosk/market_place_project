@@ -13,7 +13,7 @@
     <h1>Browse Auctions</h1>
     
     <h2>Go to Auction Page</h2>
-	<form method="get" action="individualAuction.jsp">
+	<form method="get" action="individualAuctions.jsp">
 	    <label for="auctionId">Enter Auction ID:</label>
 	    <input type="number" id="auctionId" name="auctionId" required><br>
 	    <input type="submit" value="Go to Auction">

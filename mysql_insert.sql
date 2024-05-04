@@ -100,6 +100,11 @@ VALUES
 (4, 3, 9000.00, '2024-05-06 13:00:00'),   
 (5, 3, 8000.00, '2024-05-07 14:00:00');
 
-
-
-
+INSERT INTO faqs (poster_id, content) VALUES 
+(2, 'how sell'),
+(3, 'how buy'),
+(3, 'how how');
+INSERT INTO faqs (poster_id, parent_id, content) VALUES 
+(1, 1, 'click sell!'),
+(1, 1, 'sell!'),
+(1, 2, 'yes!');

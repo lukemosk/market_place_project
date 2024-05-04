@@ -47,6 +47,7 @@
 		try {
 			conn.prepareStatement(query).executeUpdate();
 			session.setAttribute("user", username);
+			session.setAttribute("type", "default");
 			response.sendRedirect("home.jsp");
 		} catch (SQLIntegrityConstraintViolationException e) {
 			out.println("<h2>Registration Failed: A user with that name already exists!</h2>");
