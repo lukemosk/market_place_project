@@ -14,6 +14,7 @@
 	<%
 	if(session.getAttribute("user") == null) {
 		response.sendRedirect("login.jsp");
+		return;
 	} else {
 		String type = (String) session.getAttribute("type");
 		if (!type.equals("admin")) {

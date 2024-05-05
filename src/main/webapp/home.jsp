@@ -28,8 +28,9 @@
 </head>
 <body>
 	<%
-	if(session.getAttribute("user") == null) {
+	if(session.getAttribute("user") == null || session.getAttribute("type") == null) {
 		response.sendRedirect("login.jsp");
+		return;
 	} else {
 		out.println("<h1>Welcome, " + session.getAttribute("user") + "!</h1>");
 	}

@@ -30,11 +30,12 @@
 	<%
 	if(session.getAttribute("user") == null) {
 		response.sendRedirect("login.jsp");
+		return;
 	}
 	%>
 	
     <br><br>
-    <h3>Triggered Alerts (blank if none):</h3>
+    <h3>Your Alerts (blank if none):</h3>
     <%
 	try {
 		String currentUser = (String) session.getAttribute("user");
@@ -63,6 +64,7 @@
 			String year = rs.getString(4);
 			%>
 			<div class="alert">
+				<h3>Item on Auction!</h3>
 				<h3><%= "AuctionID: " + id + " | " + make + " " + model + " " + year %></h3>
 				<a href="individualAuctions.jsp?auctionId=<%= id %>">Goto Product</a>
 			</div>
