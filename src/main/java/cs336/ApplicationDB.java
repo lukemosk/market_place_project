@@ -17,7 +17,7 @@ public abstract class ApplicationDB {
 		}
 		
 		try {
-			connection = DriverManager.getConnection(connectionUrl, "root", "root");
+			connection = DriverManager.getConnection(connectionUrl, "root", "1234Mosk");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

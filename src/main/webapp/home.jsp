@@ -39,9 +39,11 @@
     <a href="sell_car.jsp" class="button">Sell Car</a>
     <a href="sell_boat.jsp" class="button">Sell Boat</a>
     <a href="sell_motorbike.jsp" class="button">Sell Motorbike</a>
-    <a href="faq.jsp" class="button">View/Post FAQs</a>
     <a href="alerts.jsp" class="button">View/Create Alerts</a>
+    <a href="faq.jsp" class="button">View/Post FAQs</a> <br>
     <a href="viewAuctions.jsp" class = "button">View Buy/Sell History of a User</a>
+
+    
     <br><br><br><br>
     <%
 	String type = (String) session.getAttribute("type");
