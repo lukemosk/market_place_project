@@ -26,13 +26,14 @@
 			Selling Items</button>
 		<button type="submit" name="bestbuyer" value="bestbuyer">Best
 			Buyers</button>
-		<br> <br> <br> <label for="users">User: </label> <select
+		<br> <br> <br> 
+		<label for="users">User: </label> <select
 			name="users" id="users">
 			<option label="ALL" value="ALL"></option>
 			<%
 			try {
 				Connection conn = ApplicationDB.getConnection();
-				String getAllUsersQuery = "SELECT username FROM users";
+				String getAllUsersQuery = "SELECT username FROM users;";
 				ResultSet rs = conn.prepareStatement(getAllUsersQuery).executeQuery();
 
 				while (rs.next()) {

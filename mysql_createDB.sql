@@ -9,6 +9,8 @@ CREATE TABLE users (
   username varchar(255) NOT NULL UNIQUE,
   password varchar(255) NOT NULL,
   type ENUM('admin', 'cs', 'default'),
+  email varchar(64),
+  dob DATE,
   PRIMARY KEY (id)
 );
 

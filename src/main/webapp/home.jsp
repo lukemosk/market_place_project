@@ -46,6 +46,9 @@
 	if (type.equals("admin")) {
 		out.println("<a href=\"admin_panel.jsp\" class=\"button\">Admin Panel</a>");
 	}
+	if(type.equals("cs") || type.equals("admin")) {
+		out.println("<a href=\"edit_users.jsp\" class=\"button\">Edit Users</a>");
+	}
     %>
     <br><br><br><br>
     <a href="logout.jsp" class="button">Logout</a>
