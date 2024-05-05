@@ -63,3 +63,13 @@ CREATE TABLE faqs (
     FOREIGN KEY (poster_id) REFERENCES users(id),
     FOREIGN KEY (parent_id) REFERENCES faqs(message_id)
 );
+
+CREATE TABLE alerts (
+	alert_id int AUTO_INCREMENT NOT NULL,
+    user_id int NOT NULL,
+    make varchar(50) NOT NULL,
+    model varchar(50) NOT NULL,              
+    year int NOT NULL,
+    PRIMARY KEY (alert_id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);

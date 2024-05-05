@@ -8,7 +8,6 @@
 <title>FAQ Page</title>
 <style>
 body {
-	font-family: Arial, sans-serif;
 	text-align: center;
 	padding-top: 50px;
 }

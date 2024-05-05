@@ -40,6 +40,7 @@
     <a href="sell_boat.jsp" class="button">Sell Boat</a>
     <a href="sell_motorbike.jsp" class="button">Sell Motorbike</a>
     <a href="faq.jsp" class="button">View/Post FAQs</a>
+    <a href="alerts.jsp" class="button">View/Create Alerts</a>
     <br><br><br><br>
     <%
 	String type = (String) session.getAttribute("type");

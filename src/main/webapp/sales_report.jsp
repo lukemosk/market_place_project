@@ -60,10 +60,10 @@
 				ResultSet rs = conn.prepareStatement(getAllAuctionsQuery).executeQuery();
 
 				while (rs.next()) {
-					String make = rs.getString(1) + " ";
-					String model = rs.getString(2) + " ";
+					String make = rs.getString(1);
+					String model = rs.getString(2);
 					String year = rs.getString(3);
-					out.println("<option value=\"" + make + model + year + "\">" + make + model + year + "</option>");
+					out.println("<option value='" + make + "@" + model + "@" + year + "'>" + make + " " + model + " " + year + "</option>");
 				}
 			} catch (Exception e) {
 				return;
@@ -190,10 +190,11 @@
 					earningsQuery += " AND vehicle_type='" + itemtype + "'";
 		
 				if (!item.equals("ALL")) {
-					String[] details = item.split(" ");
+					String[] details = item.split("@");
 					String make = details[0];
 					String model = details[1];
 					String year = details[2];
+			        
 					earningsQuery += " AND make='" + make + "' ";
 					earningsQuery += " AND model='" + model + "'";
 					earningsQuery += " AND year='" + year + "'";
