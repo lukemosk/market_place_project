@@ -123,4 +123,5 @@ INSERT INTO faqs (poster_id, parent_id, content) VALUES
 (1, 1, 'sell!'),
 (1, 2, 'yes!');
 
-SELECT * FROM bids;
+INSERT INTO alerts (user_id, make, model, year) VALUES 
+(3, 'Jaguar', 'F-Type', 2020);
