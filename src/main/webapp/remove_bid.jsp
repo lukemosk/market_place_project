@@ -9,6 +9,17 @@
 </head>
 <body>
 	<%
+	if(session.getAttribute("user") == null) {
+		response.sendRedirect("login.jsp");
+	} else {
+		String type = (String) session.getAttribute("type");
+		if (!type.equals("admin") && (!type.equals("cs"))) {
+			out.println("<h1>You do not have permission for this.</h1>");
+			out.println("<a href='home.jsp'>Home</a>");
+			return;
+		}
+	}
+	
 	String bid_id = request.getParameter("bid_id");
 	
 	Connection conn = null;
@@ -23,7 +34,7 @@
 			out.println("<p>Error: Bid ID not found, no rows affected.</p>");
 		}
 	} catch (Exception e) {
-		out.println("<p>Internal Error</p>");
+		out.println("<p>SQL Error</p>");
 	} finally {
 		if (conn != null)
 			conn.close();
