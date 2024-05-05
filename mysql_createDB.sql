@@ -5,57 +5,61 @@ CREATE DATABASE cs336project;
 USE cs336project;
 
 CREATE TABLE users (
-  id int NOT NULL AUTO_INCREMENT UNIQUE,
+  id int AUTO_INCREMENT NOT NULL,
   username varchar(255) NOT NULL UNIQUE,
   password varchar(255) NOT NULL,
-  type ENUM('admin', 'cs', 'default') NOT NULL,
+  type enum('admin', 'cs', 'default') NOT NULL,
   email varchar(64),
-  dob DATE,
+  dob date,
   PRIMARY KEY (id)
 );
 
 CREATE TABLE vehicles (
-    VIN VARCHAR(17) PRIMARY KEY NOT NULL,    
-    vehicle_type ENUM('car', 'motorbike', 'boat') NOT NULL, 
-    owner_id INT NOT NULL,                         
-    make VARCHAR(50) NOT NULL,                     
-    model VARCHAR(50) NOT NULL,                    
-    year INT NOT NULL,                             
-    mileage INT NOT NULL,                          
-    color VARCHAR(15) NOT NULL,                    
+    VIN varchar(17) NOT NULL,
+    vehicle_type enum('car', 'motorbike', 'boat') NOT NULL, 
+    owner_id int NOT NULL,                         
+    make varchar(50) NOT NULL,                     
+    model varchar(50) NOT NULL,                    
+    year int NOT NULL,                             
+    mileage int NOT NULL,                          
+    color varchar(15) NOT NULL,      
+    PRIMARY KEY (VIN),
     FOREIGN KEY (owner_id) REFERENCES users(id)
 );
 
 CREATE TABLE auctions (
-    auction_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,  
-    vehicle_id VARCHAR(17) NOT NULL,                   
-    seller_id INT NOT NULL,                             
-    start_date DATETIME NOT NULL,                       
-    end_date DATETIME NOT NULL,                         
-    starting_price DECIMAL(10, 2) NOT NULL,
-    current_price DECIMAL(10, 2) NOT NULL,
-    reserve_price DECIMAL(10, 2) DEFAULT NULL, 
-    status ENUM('pending', 'ongoing', 'closed') NOT NULL, 
+    auction_id int AUTO_INCREMENT NOT NULL,  
+    vehicle_id varchar(17) NOT NULL,                   
+    seller_id int NOT NULL,                             
+    start_date datetime NOT NULL,                       
+    end_date datetime NOT NULL,                         
+    starting_price decimal(10, 2) NOT NULL,
+    current_price decimal(10, 2) NOT NULL,
+    reserve_price decimal(10, 2) DEFAULT NULL, 
+    status enum('pending', 'ongoing', 'closed') NOT NULL, 
+    PRIMARY KEY (auction_id),
     FOREIGN KEY (vehicle_id) REFERENCES vehicles(VIN), 
     FOREIGN KEY (seller_id) REFERENCES users(id) 
 );
 
 CREATE TABLE bids (
-    bid_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,  
-    auction_id INT NOT NULL,                        
-    bidder_id INT NOT NULL,                         
-    bid_amount DECIMAL(10, 2) NOT NULL,
-    bid_upper DECIMAL(10, 2),
-    bid_time DATETIME NOT NULL,
+    bid_id int AUTO_INCREMENT NOT NULL,  
+    auction_id int NOT NULL,                        
+    bidder_id int NOT NULL,                         
+    bid_amount decimal(10, 2) NOT NULL,
+    bid_upper decimal(10, 2),
+    bid_time datetime NOT NULL,
+    PRIMARY KEY (bid_id),
     FOREIGN KEY (auction_id) REFERENCES auctions(auction_id),
     FOREIGN KEY (bidder_id) REFERENCES users(id)
 );
 
 CREATE TABLE faqs (
-    message_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    poster_id INT NOT NULL,
-    parent_id INT,
-    content TEXT NOT NULL,
+    message_id int AUTO_INCREMENT NOT NULL,
+    poster_id int NOT NULL,
+    parent_id int,
+    content text NOT NULL,
+    PRIMARY KEY (message_id),
     FOREIGN KEY (poster_id) REFERENCES users(id),
     FOREIGN KEY (parent_id) REFERENCES faqs(message_id)
 );
