@@ -92,12 +92,15 @@ VALUES
 ('2234567891234568', 2, '2024-05-07 13:00:00', '2024-05-14 21:00:00', 700033.00, 700033.00, 9000.00, 'ongoing');
 
 
+INSERT INTO bids (auction_id, bidder_id, bid_amount, bid_upper, bid_time)
+VALUES
+(1, 3, 11000.00, 13000.00, '2024-05-03 10:00:00'),
+(2, 3, 5500.00, 5500.00, '2024-05-04 11:00:00'),
+(4, 3, 9000.00, 9500.00, '2024-05-06 13:00:00');
+
 INSERT INTO bids (auction_id, bidder_id, bid_amount, bid_time)
 VALUES
-(1, 3, 11000.00, '2024-05-03 10:00:00'),  
-(2, 3, 5500.00, '2024-05-04 11:00:00'),   
 (3, 3, 21000.00, '2024-05-05 12:00:00'), 
-(4, 3, 9000.00, '2024-05-06 13:00:00'),   
 (5, 3, 8000.00, '2024-05-07 14:00:00');
 
 INSERT INTO faqs (poster_id, content) VALUES 
@@ -108,3 +111,5 @@ INSERT INTO faqs (poster_id, parent_id, content) VALUES
 (1, 1, 'click sell!'),
 (1, 1, 'sell!'),
 (1, 2, 'yes!');
+
+SELECT * FROM bids;
