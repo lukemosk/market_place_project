@@ -50,18 +50,20 @@
 			<option value="car">Cars</option>
 			<option value="boat">Boats</option>
 			<option value="motorbike">Motorcycles</option>
-		</select> <br> <br> <label for="item">Auction ID/Item: </label> <select
+		</select> <br> <br> <label for="item">Item: </label> <select
 			name="item" id="item">
 			<option label="ALL" value="ALL"></option>
 			<%
 			try {
 				Connection conn = ApplicationDB.getConnection();
-				String getAllAuctionsQuery = "SELECT auction_id FROM auctions;";
+				String getAllAuctionsQuery = "SELECT DISTINCT make, model, year FROM vehicles;";
 				ResultSet rs = conn.prepareStatement(getAllAuctionsQuery).executeQuery();
 
 				while (rs.next()) {
-					String auctionID = rs.getString(1);
-					out.println("<option value=\"" + auctionID + "\">" + auctionID + "</option>");
+					String make = rs.getString(1) + " ";
+					String model = rs.getString(2) + " ";
+					String year = rs.getString(3);
+					out.println("<option value=\"" + make + model + year + "\">" + make + model + year + "</option>");
 				}
 			} catch (Exception e) {
 				return;
@@ -154,7 +156,7 @@
 		out.println("</table>");
 	} else {
 		String reportTableQuery = "CREATE TEMPORARY TABLE report "
-		+ "SELECT auctions.auction_id, seller_id, max(bid_amount) max_bid, vehicles.vehicle_type "
+		+ "SELECT auctions.auction_id, seller_id, max(bid_amount) max_bid, vehicles.vehicle_type, vehicles.make, vehicles.model, vehicles.year "
 		+ "FROM auctions, bids, vehicles "
 		+ "WHERE auctions.auction_id = bids.auction_id and auctions.vehicle_id = vehicles.VIN "
 		+ "GROUP BY auction_id, seller_id;";
@@ -187,8 +189,15 @@
 				if (!itemtype.equals("ALL"))
 					earningsQuery += " AND vehicle_type='" + itemtype + "'";
 		
-				if (!item.equals("ALL"))
-					earningsQuery += " AND auction_id=" + item;
+				if (!item.equals("ALL")) {
+					String[] details = item.split(" ");
+					String make = details[0];
+					String model = details[1];
+					String year = details[2];
+					earningsQuery += " AND make='" + make + "' ";
+					earningsQuery += " AND model='" + model + "'";
+					earningsQuery += " AND year='" + year + "'";
+				}
 		
 				earningsQuery += ";";
 				
