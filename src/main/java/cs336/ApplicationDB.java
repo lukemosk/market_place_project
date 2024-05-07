@@ -11,13 +11,13 @@ public abstract class ApplicationDB {
 		Connection connection = null;
 		
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+		    Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		try {
-			connection = DriverManager.getConnection(connectionUrl, "root", "1234Mosk");
+			connection = DriverManager.getConnection(connectionUrl, "root", "root");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

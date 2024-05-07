@@ -31,14 +31,6 @@
 }
 </style>
 <body>
-<<<<<<< HEAD
-    <a href="browseAuctions.jsp">Products Page</a>
-    
-    <% if(session.getAttribute("user") == null) {
-        response.sendRedirect("login.jsp");
-    } %>
-    
-=======
 	<a href="browseAuctions.jsp">Products Page</a>
 	
 	<%
@@ -48,7 +40,6 @@
 	}
 	%>
 	
->>>>>>> 8608240465b8176c249af9e75b6de1ed7c08aeb0
     <br><br>
     <h3>Your Alerts (blank if none):</h3>
     <%
@@ -67,7 +58,6 @@
             return;
         }
 
-<<<<<<< HEAD
         String query = "SELECT auction_id, details.make, details.model, details.year "
                 + "FROM auctions, vehicles, (SELECT make, model, year FROM alerts WHERE user_id=" + currentID + ") details "
                 + "WHERE auctions.vehicle_id = vehicles.VIN and vehicles.make = details.make and vehicles.model = details.model and vehicles.year = details.year;";
@@ -91,32 +81,6 @@
         return;
     }
     %>
-=======
-		String query = "SELECT auction_id, details.make, details.model, details.year "
-				+ "FROM auctions, vehicles, (SELECT make, model, year FROM alerts WHERE user_id=" + currentID + ") details "
-				+ "WHERE auctions.vehicle_id = vehicles.VIN and vehicles.make = details.make and vehicles.model = details.model and vehicles.year = details.year;";
-		rs = conn.prepareStatement(query).executeQuery();
-		
-		while(rs.next()) {
-			String id = rs.getString(1);
-			String make = rs.getString(2);
-			String model = rs.getString(3);
-			String year = rs.getString(4);
-			%>
-			<div class="alert">
-				<h3>Item on Auction!</h3>
-				<h3><%= "AuctionID: " + id + " | " + make + " " + model + " " + year %></h3>
-				<a href="individualAuctions.jsp?auctionId=<%= id %>">Goto Product</a>
-			</div>
-			<br>
-			<%
-		}
-	} catch (Exception e) {
-		out.println("<h2>SQL Error when trying to load alerts!</h2>");
-		return;
-	}
-	%>
->>>>>>> 8608240465b8176c249af9e75b6de1ed7c08aeb0
     <br><br>
     
     <h3>Create Alert:</h3>
