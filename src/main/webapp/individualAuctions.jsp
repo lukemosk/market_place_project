@@ -37,6 +37,14 @@
                     double reservePrice = auctionResult.getDouble("reserve_price");
                     String auctionStatus = auctionResult.getString("status");
                     
+                    if (session.getAttribute("type").equals("cs") || session.getAttribute("type").equals("admin")) {
+                    	%>
+                    	<form action="remove_auction.jsp" method="POST">
+							<button type="submit" name="auction_id" value="<%= auctionId %>">Remove Auction</button>
+						</form>
+                    	<%
+                    }
+                    
                     out.println("<table border='1'>");
                     out.println("<tr><th>Auction ID</th><td>" + auctionResult.getInt("auction_id") + "</td></tr>");
                     out.println("<tr><th>VIN</th><td>" + auctionResult.getString("VIN") + "</td></tr>");
@@ -174,6 +182,15 @@
                             out.println("<td>" + bidHistory.getString("bidder_name") + "</td>");
                             out.println("<td>" + bidHistory.getDouble("bid_amount") + "</td>");
                             out.println("<td>" + bidHistory.getTimestamp("bid_time") + "</td>");
+                            if (session.getAttribute("type").equals("cs") || session.getAttribute("type").equals("admin")) {
+                            	%>
+                            	<td>
+	                            	<form action="remove_bid.jsp" method="POST">
+	        							<button type="submit" name="bid_id" value="<%= bidHistory.getInt("bid_id") %>">Remove Bid</button>
+	        						</form>
+        						</td>
+                            	<%
+                            }
                             out.println("</tr>");
                         } while (bidHistory.next());
                         out.println("</table>");
