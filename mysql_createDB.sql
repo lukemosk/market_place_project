@@ -73,3 +73,11 @@ CREATE TABLE alerts (
     PRIMARY KEY (alert_id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+CREATE TABLE alerts_generic (
+    alert_id int AUTO_INCREMENT NOT NULL,
+    user_id int NOT NULL,
+    type enum('car', 'motorbike', 'boat') NOT NULL,
+    varchar(1000) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);

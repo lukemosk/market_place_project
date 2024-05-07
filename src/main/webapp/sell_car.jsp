@@ -61,7 +61,7 @@
             conn = ApplicationDB.getConnection();
 
             // Insert into the Auctions table
-            String sqlInsertAuction = "INSERT INTO Auctions (endDate, minSellingPrice, bidIncrement) VALUES (?, ?, ?)";
+            String sqlInsertAuction = "INSERT INTO Auctions (end_date, minSellingPrice, bidIncrement) VALUES (?, ?, ?)";
             pstmt = conn.prepareStatement(sqlInsertAuction, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, endDate);
             pstmt.setInt(2, Integer.parseInt(minSellingPrice));
