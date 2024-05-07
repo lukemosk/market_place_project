@@ -1,6 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ page import="java.sql.*, cs336.ApplicationDB"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="javax.servlet.http.*, javax.servlet.*, java.sql.*, java.math.BigDecimal, cs336.ApplicationDB"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,20 +8,20 @@
 <body>
     <h1>List a Boat for Sale</h1>
     <form method="POST">
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username" required><br><br>
+
         <label for="endDate">Auction End Date and Time:</label><br>
         <input type="datetime-local" id="endDate" name="endDate" required><br><br>
 
-        <label for="minSellingPrice">Minimum Selling Price:</label><br>
-        <input type="number" id="minSellingPrice" name="minSellingPrice" required><br><br>
+        <label for="startingPrice">Starting Price:</label><br>
+        <input type="number" id="startingPrice" name="startingPrice" step="0.01" required><br><br>
 
-        <label for="bidIncrement">Bid Increment:</label><br>
-        <input type="number" id="bidIncrement" name="bidIncrement" required><br><br>
+        <label for="reservePrice">Reserve Price:</label><br>
+        <input type="number" id="reservePrice" name="reservePrice" step="0.01"><br><br>
 
         <label for="VIN">VIN:</label><br>
         <input type="text" id="VIN" name="VIN" required><br><br>
-
-        <label for="Price">Price:</label><br>
-        <input type="number" id="Price" name="Price" required><br><br>
 
         <label for="Make">Make:</label><br>
         <input type="text" id="Make" name="Make" required><br><br>
@@ -38,71 +37,72 @@
 
         <input type="submit" value="List Boat">
     </form>
-<% 
-    // Initialize necessary variables from the form data
-    String endDate = request.getParameter("endDate");
-    String minSellingPrice = request.getParameter("minSellingPrice");
-    String bidIncrement = request.getParameter("bidIncrement");
-    String VIN = request.getParameter("VIN");
-    String price = request.getParameter("Price");
-    String make = request.getParameter("Make");
-    String model = request.getParameter("Model");
-    String year = request.getParameter("Year");
-    String mileage = request.getParameter("Mileage");
-
-    // Check if the form has been submitted (e.g., check one required field)
-    if (endDate != null && !endDate.isEmpty()) {
+<%
+    String username = request.getParameter("username");
+    if (username != null && !username.isEmpty()) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try {
-            // Establish database connection
             conn = ApplicationDB.getConnection();
+            String userQuery = "SELECT id FROM users WHERE username = ?";
+            pstmt = conn.prepareStatement(userQuery);
+            pstmt.setString(1, username);
+            rs = pstmt.executeQuery();
 
-            // Insert into the Auctions table
-            String sqlInsertAuction = "INSERT INTO Auctions (endDate, minSellingPrice, bidIncrement) VALUES (?, ?, ?)";
-            pstmt = conn.prepareStatement(sqlInsertAuction, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setString(1, endDate);
-            pstmt.setInt(2, Integer.parseInt(minSellingPrice));
-            pstmt.setInt(3, Integer.parseInt(bidIncrement));
-            int affectedRows = pstmt.executeUpdate();
+            if (rs.next()) {
+                int userId = rs.getInt("id");
 
-            if (affectedRows > 0) {
-                // Get the generated key for the auction (listing ID)
-                rs = pstmt.getGeneratedKeys();
-                if (rs.next()) {
-                    long listingID = rs.getLong(1);
+                String endDate = request.getParameter("endDate");
+                String startingPrice = request.getParameter("startingPrice");
+                String reservePrice = request.getParameter("reservePrice");
+                String VIN = request.getParameter("VIN");
+                String make = request.getParameter("Make");
+                String model = request.getParameter("Model");
+                String year = request.getParameter("Year");
+                String mileage = request.getParameter("Mileage");
 
-                    // Insert into the Boat table using the new listing ID
-                    String sqlInsertBoat = "INSERT INTO Boat (VIN, Price, Make, Model, Year, Mileage, listingID) VALUES (?, ?, ?, ?, ?, ?, ?)";
-                    pstmt = conn.prepareStatement(sqlInsertBoat);
-                    pstmt.setString(1, VIN);
-                    pstmt.setInt(2, Integer.parseInt(price));
-                    pstmt.setString(3, make);
-                    pstmt.setString(4, model);
-                    pstmt.setInt(5, Integer.parseInt(year));
-                    pstmt.setInt(6, Integer.parseInt(mileage));
-                    pstmt.setLong(7, listingID);
-                    pstmt.executeUpdate();
+                // Insert into vehicles table
+                String sqlInsertVehicle = "INSERT INTO vehicles (VIN, vehicle_type, owner_id, make, model, year, mileage, color) VALUES (?, 'Boat', ?, ?, ?, ?, ?, 'unknown')";
+                pstmt = conn.prepareStatement(sqlInsertVehicle);
+                pstmt.setString(1, VIN);
+                pstmt.setInt(2, userId);
+                pstmt.setString(3, make);
+                pstmt.setString(4, model);
+                pstmt.setInt(5, Integer.parseInt(year));
+                pstmt.setInt(6, Integer.parseInt(mileage));
+                pstmt.executeUpdate();
 
-                    out.println("<p>Boat listed successfully!</p>");
+                // Insert into auctions table
+                String sqlInsertAuction = "INSERT INTO auctions (vehicle_id, seller_id, start_date, end_date, starting_price, current_price, reserve_price) VALUES (?, ?, NOW(), ?, ?, ?, ?)";
+                pstmt = conn.prepareStatement(sqlInsertAuction);
+                pstmt.setString(1, VIN);
+                pstmt.setInt(2, userId);
+                pstmt.setString(3, endDate);
+                pstmt.setBigDecimal(4, new BigDecimal(startingPrice));
+                pstmt.setBigDecimal(5, new BigDecimal(startingPrice));
+                if (reservePrice != null && !reservePrice.isEmpty()) {
+                    pstmt.setBigDecimal(6, new BigDecimal(reservePrice));
                 } else {
-                    out.println("<p>Error: Auction was not created, no ID obtained.</p>");
+                    pstmt.setNull(6, java.sql.Types.DECIMAL);
                 }
+                pstmt.executeUpdate();
+
+                out.println("<p>Boat listed successfully!</p>");
             } else {
-                out.println("<p>Error: No rows affected, auction not created.</p>");
+                out.println("<p>User not found. Please check your username and try again.</p>");
             }
         } catch (Exception e) {
             out.println("<p>Error processing request: " + e.getMessage() + "</p>");
         } finally {
-            // Clean up database resources
             if (rs != null) try { rs.close(); } catch (SQLException ignore) {}
             if (pstmt != null) try { pstmt.close(); } catch (SQLException ignore) {}
             if (conn != null) try { conn.close(); } catch (SQLException ignore) {}
         }
+    } else {
+        out.println("<p>Please enter a username.</p>");
     }
 %>
-
-
 </body>
 </html>
+
