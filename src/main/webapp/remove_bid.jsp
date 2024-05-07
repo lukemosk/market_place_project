@@ -26,7 +26,17 @@
 	Connection conn = null;
 	try {
 		conn = ApplicationDB.getConnection();
+		String auctionID = null;
+		String getAuctionID = "SELECT auction_id FROM bids WHERE bid_id=" + bid_id;
+		ResultSet rs = conn.prepareStatement(getAuctionID).executeQuery();
+		if(rs.next()) {
+			auctionID = rs.getString(1);
+		} else {
+			return;
+		}
+		
 		String removeBid = "DELETE FROM bids WHERE bid_id=" + bid_id;
+		String updateAuction = "UPDATE auctions SET current_price = (SELECT max(bid_amount) FROM bids where auction_id=" + auctionID + ") WHERE auction_id=" + auctionID + ";";
 		int affectedRows = conn.prepareStatement(removeBid).executeUpdate();
 
 		if (affectedRows > 0) {
@@ -34,6 +44,8 @@
 		} else {
 			out.println("<p>Error: No rows affected.</p>");
 		}
+		
+		conn.prepareStatement(updateAuction).executeUpdate();
 	} catch (Exception e) {
 		out.println("<p>SQL Error</p>");
 	} finally {

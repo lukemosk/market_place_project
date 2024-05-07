@@ -216,7 +216,7 @@
                         out.println("<tr><th>VIN</th><th>Make</th><th>Model</th><th>Year</th><th>Color</th><th>Start Date</th><th>End Date</th><th>Starting Price</th><th>Current Price</th></tr>");
                         do {
                             out.println("<tr>");
-                            out.println("<td><a href='auction.jsp?auctionId=" + similarItems.getInt("auction_id") + "'>" + similarItems.getString("VIN") + "</a></td>");
+                            out.println("<td><a href='individualAuctions.jsp?auctionId=" + similarItems.getInt("auction_id") + "'>" + similarItems.getString("VIN") + "</a></td>");
                             out.println("<td>" + similarItems.getString("make") + "</td>");
                             out.println("<td>" + similarItems.getString("model") + "</td>");
                             out.println("<td>" + similarItems.getInt("year") + "</td>");
