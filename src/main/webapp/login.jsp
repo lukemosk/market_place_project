@@ -5,6 +5,7 @@
 <%@ page import="cs336.ApplicationDB"%>
 <%@ page import="java.util.Timer"%>
 <%@ page import="java.util.TimerTask"%>
+<%@ page import="cs336.AuctionCloser"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -49,6 +50,10 @@
 		if (rs.next()) {
 			session.setAttribute("user", username);
 			session.setAttribute("type", rs.getString(2));
+            // Start the AuctionCloser timer
+            AuctionCloser auctionCloser = new AuctionCloser();
+            Timer timer = new Timer();
+            timer.scheduleAtFixedRate(auctionCloser, 0, AuctionCloser.getInterval());
 			response.sendRedirect("home.jsp");
 		} else {
 			out.println("<h2>Login Failed: Incorrect username or password.</h2>");
