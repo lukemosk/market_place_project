@@ -26,6 +26,7 @@
 	// If they are logged in, send them to home page
 	if(session.getAttribute("user") != null) {
 		response.sendRedirect("home.jsp");
+		return;
 	}
 	
 	String username = request.getParameter("username");

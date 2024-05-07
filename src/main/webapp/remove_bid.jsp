@@ -11,6 +11,7 @@
 	<%
 	if(session.getAttribute("user") == null) {
 		response.sendRedirect("login.jsp");
+		return;
 	} else {
 		String type = (String) session.getAttribute("type");
 		if (!type.equals("admin") && (!type.equals("cs"))) {
@@ -31,7 +32,7 @@
 		if (affectedRows > 0) {
 			out.println("<p>Success. Bid removed!</p>");
 		} else {
-			out.println("<p>Error: Bid ID not found, no rows affected.</p>");
+			out.println("<p>Error: No rows affected.</p>");
 		}
 	} catch (Exception e) {
 		out.println("<p>SQL Error</p>");
@@ -39,6 +40,7 @@
 		if (conn != null)
 			conn.close();
 	}
+	out.println("<a href='home.jsp'>Home</a>");
 	%>
 </body>
 </html>
