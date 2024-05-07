@@ -3,10 +3,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>List a Motorbike for Sale</title>
+    <title>List a motorbike for Sale</title>
 </head>
 <body>
-    <h1>List a Motorbike for Sale</h1>
+    <h1>List a motorbike for Sale</h1>
     <form method="POST">
         <label for="username">Username:</label><br>
         <input type="text" id="username" name="username" required><br><br>
@@ -35,7 +35,10 @@
         <label for="Mileage">Mileage:</label><br>
         <input type="number" id="Mileage" name="Mileage" required><br><br>
 
-        <input type="submit" value="List Motorbike">
+        <label for="Color">Color:</label><br>
+        <input type="text" id="Color" name="Color"><br><br>
+
+        <input type="submit" value="List motorbike">
     </form>
 <%
     String username = request.getParameter("username");
@@ -61,9 +64,11 @@
                 String model = request.getParameter("Model");
                 String year = request.getParameter("Year");
                 String mileage = request.getParameter("Mileage");
+                String color = request.getParameter("Color");
+                color = (color != null && !color.isEmpty()) ? color : "unknown";  // Set default color if not specified
 
                 // Insert into vehicles table
-                String sqlInsertVehicle = "INSERT INTO vehicles (VIN, vehicle_type, owner_id, make, model, year, mileage, color) VALUES (?, 'Motorbike', ?, ?, ?, ?, ?, 'unknown')";
+                String sqlInsertVehicle = "INSERT INTO vehicles (VIN, vehicle_type, owner_id, make, model, year, mileage, color) VALUES (?, 'motorbike', ?, ?, ?, ?, ?, ?)";
                 pstmt = conn.prepareStatement(sqlInsertVehicle);
                 pstmt.setString(1, VIN);
                 pstmt.setInt(2, userId);
@@ -71,6 +76,7 @@
                 pstmt.setString(4, model);
                 pstmt.setInt(5, Integer.parseInt(year));
                 pstmt.setInt(6, Integer.parseInt(mileage));
+                pstmt.setString(7, color);
                 pstmt.executeUpdate();
 
                 // Insert into auctions table
@@ -88,7 +94,7 @@
                 }
                 pstmt.executeUpdate();
 
-                out.println("<p>Motorbike listed successfully!</p>");
+                out.println("<p>motorbike listed successfully!</p>");
             } else {
                 out.println("<p>User not found. Please check your username and try again.</p>");
             }

@@ -35,6 +35,9 @@
         <label for="Mileage">Mileage:</label><br>
         <input type="number" id="Mileage" name="Mileage" required><br><br>
 
+        <label for="Color">Color:</label><br>
+        <input type="text" id="Color" name="Color"><br><br>
+
         <input type="submit" value="List Boat">
     </form>
 <%
@@ -61,9 +64,11 @@
                 String model = request.getParameter("Model");
                 String year = request.getParameter("Year");
                 String mileage = request.getParameter("Mileage");
+                String color = request.getParameter("Color");
+                color = (color != null && !color.isEmpty()) ? color : "unknown";  // Set default color if not specified
 
                 // Insert into vehicles table
-                String sqlInsertVehicle = "INSERT INTO vehicles (VIN, vehicle_type, owner_id, make, model, year, mileage, color) VALUES (?, 'Boat', ?, ?, ?, ?, ?, 'unknown')";
+                String sqlInsertVehicle = "INSERT INTO vehicles (VIN, vehicle_type, owner_id, make, model, year, mileage, color) VALUES (?, 'boat', ?, ?, ?, ?, ?, ?)";
                 pstmt = conn.prepareStatement(sqlInsertVehicle);
                 pstmt.setString(1, VIN);
                 pstmt.setInt(2, userId);
@@ -71,6 +76,7 @@
                 pstmt.setString(4, model);
                 pstmt.setInt(5, Integer.parseInt(year));
                 pstmt.setInt(6, Integer.parseInt(mileage));
+                pstmt.setString(7, color);
                 pstmt.executeUpdate();
 
                 // Insert into auctions table
@@ -105,4 +111,3 @@
 %>
 </body>
 </html>
-
