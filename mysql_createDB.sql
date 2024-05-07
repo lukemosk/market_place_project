@@ -36,7 +36,7 @@ CREATE TABLE auctions (
     starting_price decimal(10, 2) NOT NULL,
     current_price decimal(10, 2) NOT NULL,
     reserve_price decimal(10, 2) DEFAULT NULL, 
-    status enum('pending', 'ongoing', 'closed') NOT NULL, 
+    status enum('ongoing', 'closed') NOT NULL, 
     PRIMARY KEY (auction_id),
     FOREIGN KEY (vehicle_id) REFERENCES vehicles(VIN), 
     FOREIGN KEY (seller_id) REFERENCES users(id) 
